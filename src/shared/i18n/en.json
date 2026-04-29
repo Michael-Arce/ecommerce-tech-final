@@ -1,0 +1,411 @@
+{
+  "header": {
+    "searchPlaceholder": "Search products…",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "createAccount": "Create account",
+    "hello": "Hello,",
+    "admin": "Admin",
+    "categories": "Categories",
+    "offers": "Offers",
+    "myProfile": "My Profile",
+    "myOrders": "My Orders",
+    "favorites": "Favorites",
+    "cart": "Cart",
+    "adminPanel": "Admin Panel",
+    "sendTo": "Send to",
+    "sendToZipCode": "Send to ZIP code",
+    "openMenu": "Open menu",
+    "shipsTo": "Ships to"
+  },
+  "footer": {
+    "tagline": "Premium tech, delivered fast.",
+    "company": "Company",
+    "aboutUs": "About us",
+    "careers": "Careers",
+    "press": "Press",
+    "support": "Support",
+    "helpCenter": "Help center",
+    "contactUs": "Contact us",
+    "returns": "Returns",
+    "legal": "Legal",
+    "privacyPolicy": "Privacy policy",
+    "termsOfService": "Terms of service",
+    "cookiePolicy": "Cookie policy",
+    "copyright": "© {{year}} Ecommerce. All rights reserved."
+  },
+  "home": {
+    "hero": {
+      "badge": "+50,000 satisfied customers",
+      "title1": "The tech you want",
+      "title2": "is right here.",
+      "subtitle": "Apple, Samsung, Sony and more. The most complete selection, at the price you deserve.",
+      "shopNow": "Shop Now",
+      "browseBrands": "Browse Brands"
+    },
+    "flashDeals": {
+      "label": "Flash Deals",
+      "badge": "Today only",
+      "seeAll": "See all",
+      "viewAllDeals": "View all deals"
+    },
+    "stats": {
+      "productsValue": "10,000+",
+      "productsLabel": "Products",
+      "brandsValue": "500+",
+      "brandsLabel": "Brands",
+      "satisfactionValue": "99.9%",
+      "satisfactionLabel": "Satisfaction",
+      "supportValue": "24/7",
+      "supportLabel": "Support",
+      "customersValue": "50K+",
+      "customersLabel": "Happy Customers",
+      "shippingValue": "Free",
+      "shippingLabel": "Shipping $99+"
+    },
+    "brands": {
+      "trustedPartners": "Trusted Partners",
+      "topBrands": "Top",
+      "topBrandsHighlight": "Brands",
+      "scrollLeft": "Scroll left",
+      "scrollRight": "Scroll right"
+    },
+    "valueProps": {
+      "freeShipping": "Free Shipping",
+      "freeShippingDesc": "On all orders over $99",
+      "warranty": "2-Year Warranty",
+      "warrantyDesc": "On all products we sell",
+      "returns": "30-Day Returns",
+      "returnsDesc": "No questions asked"
+    }
+  },
+  "categories": {
+    "laptops": "Laptops",
+    "smartphones": "Smartphones",
+    "headphones": "Headphones",
+    "monitors": "Monitors",
+    "tablets": "Tablets",
+    "components": "Components"
+  },
+  "catalog": {
+    "sortBy": "Sort by",
+    "sortNewest": "Newest",
+    "sortPriceAsc": "Price: Low to High",
+    "sortPriceDesc": "Price: High to Low",
+    "productsFound_one": "{{count}} product found",
+    "productsFound_other": "{{count}} products found",
+    "failedToLoad": "Failed to load products",
+    "tryAgain": "Please try again later.",
+    "noProducts": "No products found",
+    "adjustFilters": "Try adjusting your filters.",
+    "clearAllFilters": "Clear all filters"
+  },
+  "filters": {
+    "title": "Filters",
+    "category": "Category",
+    "brand": "Brand",
+    "price": "Price",
+    "minPlaceholder": "Min",
+    "maxPlaceholder": "Max",
+    "clearFilters": "Clear filters"
+  },
+  "productCard": {
+    "buyNow": "Buy Now",
+    "addToCart": "Add to cart",
+    "added": "Added!",
+    "lowStock": "Low Stock",
+    "outOfStock": "Out of stock",
+    "freeShipping": "Free shipping",
+    "installments6": "6 installments of {{amount}} interest-free",
+    "installments12": "12 installments of {{amount}}",
+    "subscribeDiscount": "Subscribe & save 10%"
+  },
+  "productDetail": {
+    "notFound": "Product not found",
+    "backToCatalog": "Back to catalog",
+    "home": "Home",
+    "options": "Options",
+    "inStock": "In stock",
+    "onlyLeft": "Only {{count}} left",
+    "outOfStock": "Out of stock",
+    "reviews_one": "{{count}} review",
+    "reviews_other": "{{count}} reviews",
+    "freeShipping": "Free Shipping",
+    "freeShippingDesc": "Orders over $99",
+    "warranty": "2-Year Warranty",
+    "warrantyDesc": "All products",
+    "returns": "30-Day Returns",
+    "returnsDesc": "No questions",
+    "moreIn": "More in {{category}}",
+    "seeAll": "See all"
+  },
+  "brands": {
+    "title": "Browse Brands",
+    "subtitle": "Shop from the world's leading tech manufacturers. Every brand, every product, one place.",
+    "countSuffix": "Brands",
+    "comingSoon": "Coming soon",
+    "allBrands": "All brands",
+    "brandNotFound": "Brand not found",
+    "browseAllBrands": "Browse all brands",
+    "noProducts": "No products yet",
+    "noProductsDesc": "Check back soon for {{name}} products.",
+    "productCount_one": "{{count}} product",
+    "productCount_other": "{{count}} products"
+  },
+  "shelf": {
+    "seeAll": "See all"
+  },
+  "categoryShelf": {
+    "featuredDeal": "Featured deal",
+    "seeAll": "See all",
+    "laptops": { "slides": [
+      { "headline": "Bring the PC of your dreams at the best price", "body": "MacBooks, Dell XPS, Surface and more. Free shipping on all models." },
+      { "headline": "Because you want it and you deserve it", "body": "Interest-free financing. The perfect notebook, now within reach." },
+      { "headline": "Technology that works as hard as you do", "body": "Real power for those who don't settle for less." }
+    ]},
+    "smartphones": { "slides": [
+      { "headline": "The smartphone you've always wanted", "body": "iPhone, Galaxy, Pixel and more. Official warranty and same-day shipping." },
+      { "headline": "Because you deserve it", "body": "Up to 36 interest-free installments. The upgrade you've been putting off." },
+      { "headline": "Your world, in the palm of your hand", "body": "The newest models, with the best camera and battery on the market." }
+    ]},
+    "headphones": { "slides": [
+      { "headline": "Sound that surrounds you, quality you can feel", "body": "Sony, Bose, Apple and Sennheiser. Premium noise cancelling for work and travel." },
+      { "headline": "Listen differently, live differently", "body": "Because music deserves the best headphones." },
+      { "headline": "For those who don't settle for less", "body": "Studio audio, gaming or street — we have the perfect pair for you." }
+    ]},
+    "monitors": { "slides": [
+      { "headline": "Your workspace deserves the best screen", "body": "4K, ultrawide, gaming and professional. Productivity on another level." },
+      { "headline": "Because your eyes are worth it", "body": "Accurate colors, incredible refresh rate. The screen that changes everything." },
+      { "headline": "4K starting today, no excuses", "body": "Gaming, design or work — the ideal monitor for every you." }
+    ]},
+    "tablets": { "slides": [
+      { "headline": "Power and portability in one device", "body": "iPad Pro, Galaxy Tab and Surface Go. Create and work from anywhere." },
+      { "headline": "Because you want more freedom", "body": "The tool that doesn't hold you back. Light, powerful, always ready." },
+      { "headline": "Your next favorite tool is waiting", "body": "For creators, students and professionals who demand the best." }
+    ]},
+    "components": { "slides": [
+      { "headline": "Build the PC you've always dreamed of", "body": "GPUs, CPUs, RAM and motherboards from the best brands." },
+      { "headline": "Your perfect setup is waiting", "body": "Original components with warranty. Your ideal build one click away." },
+      { "headline": "Because you know what you want", "body": "The best brands at the best price. No compromises." }
+    ]}
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "language": {
+    "select": "Language",
+    "en": "English",
+    "es": "Español"
+  },
+  "cart": {
+    "title": "Your Cart",
+    "empty": "Your cart is empty",
+    "emptyDesc": "Looks like you haven't added anything yet.",
+    "browseProducts": "Browse products",
+    "removeItem": "Remove item",
+    "proceedToCheckout": "Proceed to Checkout"
+  },
+  "orderSummary": {
+    "title": "Order Summary",
+    "subtotal": "Subtotal",
+    "tax": "Tax (10%)",
+    "total": "Total"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "fillDemo": "Fill demo data",
+    "shippingAddress": "Shipping Address",
+    "street": "Street",
+    "city": "City",
+    "state": "State",
+    "zipCode": "ZIP Code",
+    "country": "Country",
+    "payment": "Payment",
+    "cardNumber": "Card Number",
+    "cardHolder": "Cardholder Name",
+    "expiry": "Expiry",
+    "cvv": "CVV",
+    "yourOrder": "Your Order",
+    "qty": "Qty: {{count}}",
+    "orderSummary": "Order summary",
+    "subtotal": "Subtotal",
+    "tax": "Tax (10%)",
+    "total": "Total",
+    "placeOrder": "Place Order",
+    "placingOrder": "Placing order…",
+    "orderError": "Something went wrong placing your order. Please try again."
+  },
+  "account": {
+    "nav": {
+      "profile": "Profile",
+      "addresses": "Addresses",
+      "password": "Password",
+      "orders": "Orders",
+      "wishlist": "Wishlist",
+      "notifications": "Notifications"
+    },
+    "profile": {
+      "title": "My Profile",
+      "edit": "Edit",
+      "cancel": "Cancel",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email",
+      "role": "Role",
+      "memberSince": "Member since",
+      "roleAdmin": "Administrator",
+      "roleCustomer": "Customer",
+      "saving": "Saving…",
+      "saveChanges": "Save changes"
+    },
+    "orders": {
+      "title": "My Orders",
+      "empty": "No orders yet",
+      "emptyDesc": "Your orders will appear here once you make a purchase.",
+      "browseProducts": "Browse products",
+      "viewOrder": "View order",
+      "item_one": "{{count}} item",
+      "item_other": "{{count}} items",
+      "detailTitle": "Order detail",
+      "notFound": "Order not found",
+      "backToOrders": "Back to orders",
+      "cancelOrder": "Cancel order",
+      "cancelling": "Cancelling…",
+      "items": "Items",
+      "qty": "Qty: {{count}} · {{price}} each",
+      "shippingAddress": "Shipping Address"
+    },
+    "orderStatus": {
+      "pending": "Pending",
+      "processing": "Processing",
+      "shipped": "Shipped",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled"
+    },
+    "wishlist": {
+      "title": "My Wishlist",
+      "clearAll": "Clear all",
+      "empty": "Your wishlist is empty",
+      "emptyDesc": "Save products you love and come back to them later.",
+      "explore": "Explore products"
+    },
+    "addresses": {
+      "title": "My Addresses",
+      "addAddress": "Add address",
+      "newAddress": "New address",
+      "saveAddress": "Save address",
+      "cancel": "Cancel",
+      "street": "Street",
+      "city": "City",
+      "state": "State",
+      "zipCode": "ZIP Code",
+      "country": "Country",
+      "empty": "No addresses saved",
+      "emptyDesc": "Add a shipping address to speed up checkout.",
+      "default": "Default",
+      "saving": "Saving…",
+      "setDefault": "Set default",
+      "delete": "Delete address"
+    },
+    "password": {
+      "title": "Change Password",
+      "current": "Current password",
+      "new": "New password",
+      "confirm": "Confirm new password",
+      "saving": "Saving…",
+      "update": "Update password",
+      "success": "Password updated successfully.",
+      "incorrectCurrent": "Current password is incorrect"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "clearAll": "Clear all",
+      "empty": "No notifications yet",
+      "markAllRead": "Mark all read",
+      "viewAll": "View all notifications",
+      "justNow": "Just now",
+      "minutesAgo": "{{count}}m ago",
+      "hoursAgo": "{{count}}h ago",
+      "daysAgo": "{{count}}d ago"
+    }
+  },
+  "authLayout": {
+    "headline": "Your premium",
+    "headlineHighlight": "tech destination.",
+    "subheadline": "Top-tier products, unbeatable prices, and a seamless shopping experience built for tech enthusiasts.",
+    "perkFreeShipping": "Free shipping",
+    "perkFreeShippingDesc": "On orders over $99",
+    "perkWarranty": "2-year warranty",
+    "perkWarrantyDesc": "On all products",
+    "perkReturns": "30-day returns",
+    "perkReturnsDesc": "No questions asked",
+    "copyright": "© {{year}} PremiumTech. All rights reserved."
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to your account to continue.",
+      "demoAccounts": "Demo accounts — click to fill",
+      "clickToFill": "click to fill",
+      "noAccount": "Don't have an account?",
+      "createOne": "Create one",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "signingIn": "Signing in…",
+      "signIn": "Sign in",
+      "emailInvalid": "Please enter a valid email address",
+      "passwordMin": "Password must be at least 8 characters",
+      "demoCustomer": "Customer",
+      "demoAdmin": "Admin"
+    },
+    "register": {
+      "title": "Create your account",
+      "subtitle": "Join thousands of tech enthusiasts today.",
+      "firstNameLabel": "First name",
+      "lastNameLabel": "Last name",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "confirmPasswordLabel": "Confirm password",
+      "firstNameMin": "First name must be at least 2 characters",
+      "lastNameMin": "Last name must be at least 2 characters",
+      "emailInvalid": "Please enter a valid email address",
+      "passwordMin": "Password must be at least 8 characters",
+      "passwordsNoMatch": "Passwords do not match",
+      "creatingAccount": "Creating account…",
+      "createAccount": "Create account",
+      "alreadyHaveAccount": "Already have an account?",
+      "signIn": "Sign in"
+    }
+  },
+  "confirmation": {
+    "title": "Order Confirmed!",
+    "subtitle": "Thank you for your purchase. We'll start processing your order right away.",
+    "orderId": "Order ID",
+    "viewOrders": "View My Orders",
+    "continueShopping": "Continue Shopping"
+  },
+  "assistant": {
+    "title": "PremiumTech Assistant",
+    "subtitle": "AI-powered shopping help",
+    "openLabel": "Open AI assistant",
+    "closeLabel": "Close assistant",
+    "clearLabel": "Clear conversation",
+    "emptyHeading": "How can I help you?",
+    "emptySubtitle": "Ask me anything about our products",
+    "placeholder": "Ask about products…",
+    "disclaimer": "AI responses may be inaccurate. Verify prices and stock before purchasing.",
+    "bubbleMessages": [
+      "How can I help you?",
+      "I'm your shopping assistant",
+      "Find your next favorite product!",
+      "Need help choosing?"
+    ],
+    "quickActions": [
+      "Recommend me a laptop under $1000",
+      "Compare iPhone 15 Pro vs Galaxy S24",
+      "What's in my cart?",
+      "Best headphones for music"
+    ]
+  }
+}

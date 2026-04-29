@@ -1,0 +1,88 @@
+# PremiumTech API — VS Code REST Client / JetBrains HTTP Client
+# Install "REST Client" extension in VS Code to run these directly.
+
+@base = http://localhost:3001/api
+@prod = https://ecommerce-tech-ftva.onrender.com/api
+
+### ── AUTH ─────────────────────────────────────────────────────────────────────
+
+### Login (admin)
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@premiumtech.com",
+  "password": "password123"
+}
+
+### Login (customer)
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "sofia.martin@gmail.com",
+  "password": "password123"
+}
+
+### ── SEMANTIC SEARCH ────────────────────────────────────────────────────────
+
+### Natural language search
+GET {{base}}/search?q=gaming+laptop+under+1000&sort=relevance&perPage=6
+
+### Filter only (no AI)
+GET {{base}}/search?category=smartphones&brand=apple&inStock=true&sort=price_asc
+
+### Hybrid: query + filters
+GET {{base}}/search?q=wireless+headphones&minPrice=50&maxPrice=300&inStock=true
+
+### ── SIMILAR PRODUCTS ────────────────────────────────────────────────────────
+
+### Get similar products (replace :id with a real product id from search results)
+GET {{base}}/products/PRODUCT_ID/similar
+
+### ── AI ASSISTANT ────────────────────────────────────────────────────────────
+# Response is SSE (text/event-stream). REST Client shows raw stream.
+
+### Guest chat — product recommendation
+POST {{base}}/assistant/chat
+Content-Type: application/json
+
+{
+  "message": "I need a laptop for video editing, budget around $1500",
+  "history": []
+}
+
+### Multi-turn conversation
+POST {{base}}/assistant/chat
+Content-Type: application/json
+
+{
+  "message": "Which one has more RAM?",
+  "history": [
+    { "role": "user",      "content": "Show me MacBook options" },
+    { "role": "assistant", "content": "Here are the MacBook models available..." }
+  ]
+}
+
+### Authenticated chat (add to cart) — replace TOKEN with JWT from login response
+POST {{base}}/assistant/chat
+Content-Type: application/json
+Authorization: Bearer TOKEN
+
+{
+  "message": "Add the cheapest laptop to my cart",
+  "history": []
+}
+
+### ── PRODUCTS ─────────────────────────────────────────────────────────────────
+
+### List products (paginated)
+GET {{base}}/products?page=1&limit=12
+
+### Product detail
+GET {{base}}/products/PRODUCT_SLUG
+
+### ── HEALTH ───────────────────────────────────────────────────────────────────
+
+### Health check
+GET {{base}}/health
