@@ -86,8 +86,7 @@ export function CheckoutPage() {
       const res = await placeOrder({
         fullName: data.fullName,
         email: data.email,
-        documentId: data.documentId,
-        phone: data.phone,
+        // Borramos documentId y phone de aquí porque van dentro de shippingAddress
         items: items.map((item) => ({
           productId: item.productId,
           variantId: item.variantId,
@@ -100,8 +99,8 @@ export function CheckoutPage() {
           street: data.address,
           city: data.city,
           country: 'Colombia',
-          cedula: data.documentId,
-          celular: data.phone,
+          cedula: data.documentId, // Aquí están perfectos
+          celular: data.phone,     // Aquí están perfectos
         },
       })
       clearCart()
@@ -111,7 +110,6 @@ export function CheckoutPage() {
       setOrderError(t('checkout.orderError') || 'Error al procesar la orden')
     }
   }
-
   if (items.length === 0) return null
 
   return (
