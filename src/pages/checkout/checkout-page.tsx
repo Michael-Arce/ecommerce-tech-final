@@ -84,9 +84,6 @@ export function CheckoutPage() {
     setOrderError(null)
     try {
       const res = await placeOrder({
-        fullName: data.fullName,
-        email: data.email,
-        // Borramos documentId y phone de aquí porque van dentro de shippingAddress
         items: items.map((item) => ({
           productId: item.productId,
           variantId: item.variantId,
