@@ -125,6 +125,19 @@ export function ProductDetailPage() {
     navigate({ to: '/checkout' })
   }
 
+  function handleExpressAddiCheckout() {
+    if (!product) return
+    addItem({
+      productId: product.id,
+      variantId: selectedVariantId ?? product.variants[0]?.id,
+      name: product.name,
+      price: displayPrice,
+      quantity: 1,
+      imageUrl: product.images[0]?.url ?? '',
+    })
+    navigate({ to: '/checkout' })
+  }
+
   // ── Loading ──────────────────────────────────────────────────────────────────
   if (isLoading) {
     return (
@@ -246,9 +259,13 @@ export function ProductDetailPage() {
 
             {/* Addi Widget */}
             <div className="mt-1 mb-2">
-              <Link to="/addi-mock" className="block transition-transform hover:scale-[1.02] active:scale-[0.98]">
+              <div 
+                onClick={handleExpressAddiCheckout}
+                className="block cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                role="button"
+              >
                 <AddiWidget price={displayPrice} />
-              </Link>
+              </div>
             </div>
 
             {/* Description */}

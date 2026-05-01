@@ -20,4 +20,5 @@ export interface Order {
   total: number
   shippingAddress: Address
   createdAt: string
+  paymentUrl?: string
 }

@@ -44,6 +44,7 @@ export function CheckoutPage() {
   const navigate = useNavigate()
   const isPlacingOrder = useRef(false)
   const [orderError, setOrderError] = useState<string | null>(null)
+  const [isManualSubmitting, setIsManualSubmitting] = useState(false)
   const [summaryOpen, setSummaryOpen] = useState(false)
 
   const subtotal = calculateSubtotal(items)
@@ -100,13 +101,54 @@ export function CheckoutPage() {
           celular: data.phone,     // Aquí están perfectos
         },
       })
-      clearCart()
-      navigate({ to: '/checkout/confirmation/$orderId', params: { orderId: res.data.id } })
+
+      if (res.data.paymentUrl) {
+        window.location.href = res.data.paymentUrl
+      } else {
+        clearCart()
+        navigate({ to: '/checkout/confirmation/$orderId', params: { orderId: res.data.id } })
+      }
     } catch {
       isPlacingOrder.current = false
       setOrderError(t('checkout.orderError') || 'Error al procesar la orden')
     }
   }
+
+  async function handleManualPayment() {
+    const isValid = await form.trigger()
+    if (!isValid) return
+
+    setIsManualSubmitting(true)
+    setOrderError(null)
+    try {
+      const data = form.getValues()
+      const res = await placeOrder({
+        items: items.map((item) => ({
+          productId: item.productId,
+          variantId: item.variantId,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          imageUrl: item.imageUrl,
+        })),
+        shippingAddress: {
+          street: data.address,
+          city: data.city,
+          country: 'Colombia',
+          cedula: data.documentId,
+          celular: data.phone,
+        },
+      })
+
+      const mensaje = `Hola, quiero reportar el pago de mi pedido #${res.data.id} por un total de ${formatCOP(total)}.`
+      clearCart()
+      window.location.href = `https://wa.me/573000000000?text=${encodeURIComponent(mensaje)}`
+    } catch {
+      setIsManualSubmitting(false)
+      setOrderError(t('checkout.orderError') || 'Error al procesar la orden')
+    }
+  }
+
   if (items.length === 0) return null
 
   return (
@@ -271,14 +313,26 @@ export function CheckoutPage() {
                   {orderError}
                 </p>
               )}
-              <Button
-                type="submit"
-                size="lg"
-                className="w-full bg-[#00E676] hover:bg-[#00C853] text-black border-none"
-                disabled={form.formState.isSubmitting}
-              >
-                {form.formState.isSubmitting ? 'Procesando...' : 'Continuar a pago con Addi'}
-              </Button>
+              <div className="flex flex-col gap-3">
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="w-full bg-[#00E676] hover:bg-[#00C853] text-black border-none"
+                  disabled={form.formState.isSubmitting || isManualSubmitting}
+                >
+                  {form.formState.isSubmitting ? 'Procesando...' : 'Continuar a pago con Addi'}
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="lg"
+                  className="w-full"
+                  onClick={handleManualPayment}
+                  disabled={form.formState.isSubmitting || isManualSubmitting}
+                >
+                  {isManualSubmitting ? 'Procesando...' : 'Pagar con Transferencia / Nequi'}
+                </Button>
+              </div>
             </div>
 
           </div>
@@ -320,15 +374,27 @@ export function CheckoutPage() {
               {orderError}
             </p>
           )}
-          <Button
-            type="submit"
-            size="lg"
-            form="checkout-form"
-            className="w-full bg-[#00E676] hover:bg-[#00C853] text-black border-none"
-            disabled={form.formState.isSubmitting}
-          >
-            {form.formState.isSubmitting ? 'Procesando...' : 'Continuar a pago con Addi'}
-          </Button>
+          <div className="flex flex-col gap-2">
+            <Button
+              type="submit"
+              size="lg"
+              form="checkout-form"
+              className="w-full bg-[#00E676] hover:bg-[#00C853] text-black border-none"
+              disabled={form.formState.isSubmitting || isManualSubmitting}
+            >
+              {form.formState.isSubmitting ? 'Procesando...' : 'Continuar a pago con Addi'}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="lg"
+              className="w-full"
+              onClick={handleManualPayment}
+              disabled={form.formState.isSubmitting || isManualSubmitting}
+            >
+              {isManualSubmitting ? 'Procesando...' : 'Pagar con Transferencia / Nequi'}
+            </Button>
+          </div>
         </div>
       </div>
     </div>

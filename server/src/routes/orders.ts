@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { z } from 'zod'
 import { prisma } from '../lib/prisma.js'
 import { authenticate, requireAdmin } from '../middleware/auth.js'
+import { generateAddiPaymentLink } from '../lib/addi.js'
 
 const router = Router()
 
@@ -79,7 +80,7 @@ router.post('/', authenticate, async (req, res, next) => {
     const order = await prisma.order.create({
       data: {
         user:   { connect: { id: req.auth!.userId } },
-        status: 'processing',
+        status: 'pending',
         total:  Number((subtotal * 1.1).toFixed(2)),
         shippingAddress: {
           create: { ...shippingAddress, userId: req.auth!.userId, isDefault: false },
@@ -97,7 +98,12 @@ router.post('/', authenticate, async (req, res, next) => {
       },
       include: ORDER_INCLUDE,
     })
-    res.status(201).json({ success: true, data: order })
+    
+    const paymentUrl = await generateAddiPaymentLink(
+      { id: order.id, total: order.total },
+      { cedula: shippingAddress.cedula, celular: shippingAddress.celular }
+    )
+    res.status(201).json({ success: true, data: { ...order, paymentUrl } })
   } catch (err) { next(err) }
 })
 
