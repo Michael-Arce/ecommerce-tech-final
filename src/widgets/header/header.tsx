@@ -86,7 +86,7 @@ export function Header() {
 
           {/* Logo */}
           <Link to="/" className="shrink-0 text-xl font-extrabold tracking-tight text-text">
-            CD <span className="text-accent">Brayan</span>
+            Discos <span className="text-accent">Brayan</span>
           </Link>
 
           {/* Search bar */}
@@ -136,7 +136,7 @@ export function Header() {
               <SheetContent side="left" className="w-72">
                 <SheetHeader>
                   <SheetTitle>
-                    CD <span className="text-accent">Brayan</span>
+                    Discos <span className="text-accent">Brayan</span>
                   </SheetTitle>
                 </SheetHeader>
                 <nav className="mt-6 flex flex-col gap-1">

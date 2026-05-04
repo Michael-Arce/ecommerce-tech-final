@@ -23,21 +23,21 @@ const MAX_IMAGES = 5
 // ─── Schemas ─────────────────────────────────────────────────────────────────
 
 const variantSchema = z.object({
-  sku:      z.string().min(1, 'Required'),
-  name:     z.string().min(1, 'Required'),
-  price:    z.coerce.number().positive('Must be > 0'),
-  stock:    z.coerce.number().int().min(0, 'Cannot be negative'),
+  sku:      z.string().min(1, 'Requerido'),
+  name:     z.string().min(1, 'Requerido'),
+  price:    z.coerce.number().positive('Debe ser > 0'),
+  stock:    z.coerce.number().int().min(0, 'No puede ser negativo'),
   imageUrl: z.string().optional(),
 })
 
 const schema = z.object({
-  name:           z.string().min(2, 'Required'),
-  description:    z.string().min(10, 'At least 10 characters'),
-  price:          z.coerce.number().positive('Must be > 0'),
+  name:           z.string().min(2, 'Requerido'),
+  description:    z.string().min(10, 'Al menos 10 caracteres'),
+  price:          z.coerce.number().positive('Debe ser > 0'),
   compareAtPrice: z.coerce.number().nonnegative().optional().or(z.literal('')),
-  stock:          z.coerce.number().int().min(0, 'Cannot be negative'),
-  categoryId:     z.string().min(1, 'Required'),
-  brandId:        z.string().min(1, 'Required'),
+  stock:          z.coerce.number().int().min(0, 'No puede ser negativo'),
+  categoryId:     z.string().min(1, 'Requerido'),
+  brandId:        z.string().min(1, 'Requerido'),
   isActive:       z.boolean(),
   variants:       z.array(variantSchema).optional(),
 })
@@ -79,6 +79,7 @@ export function ProductFormPage() {
   const [imageUrls, setImageUrls]       = useState<string[]>([])
   const [uploading, setUploading]       = useState(false)
   const [uploadError, setUploadError]   = useState<string | null>(null)
+  const [imageUrlInput, setImageUrlInput] = useState('')
 
   // ── Variant images (indexed by field array position) ──────────────────────
   const [variantImages, setVariantImages] = useState<VariantImageState[]>([])
@@ -162,7 +163,7 @@ export function ProductFormPage() {
       const results = await Promise.all(files.slice(0, remaining).map((f) => uploadProductImage(f)))
       setImageUrls((prev) => [...prev, ...results.map((r) => r.url)])
     } catch {
-      setUploadError('Upload failed. Try again.')
+      setUploadError('Falló la subida. Intentá de nuevo.')
     } finally {
       setUploading(false)
       if (fileInputRef.current) fileInputRef.current.value = ''
@@ -171,6 +172,12 @@ export function ProductFormPage() {
 
   function handleRemoveImage(index: number) {
     setImageUrls((prev) => prev.filter((_, i) => i !== index))
+  }
+
+  function handleAddImageUrl() {
+    if (!imageUrlInput.trim() || imageUrls.length >= MAX_IMAGES) return
+    setImageUrls((prev) => [...prev, imageUrlInput.trim()])
+    setImageUrlInput('')
   }
 
   // ── Variant image handlers ─────────────────────────────────────────────────
@@ -202,7 +209,7 @@ export function ProductFormPage() {
         next[index] = {
           preview:  prev[index]?.preview ?? '',
           uploading: false,
-          error:    'Upload failed.',
+          error:    'Falló la subida.',
         }
         return next
       })
@@ -267,6 +274,17 @@ export function ProductFormPage() {
     )
   }
 
+  const flattenCategories = (cats: any[], depth = 0): { id: string; name: string; depth: number }[] => {
+    return cats.reduce((acc, cat) => {
+      acc.push({ id: cat.id, name: cat.name, depth })
+      if (cat.children && cat.children.length > 0) {
+        acc.push(...flattenCategories(cat.children, depth + 1))
+      }
+      return acc
+    }, [] as { id: string; name: string; depth: number }[])
+  }
+  const flattenedCategories = flattenCategories(categories)
+
   const anyUploading = uploading || variantImages.some((v) => v.uploading)
 
 
@@ -279,7 +297,7 @@ export function ProductFormPage() {
           </Link>
         </Button>
         <PageTitle>
-          {isEdit ? (existing ? `Edit: ${existing.name}` : 'Edit product') : 'New product'}
+          {isEdit ? (existing ? `Editar: ${existing.name}` : 'Editar producto') : 'Nuevo producto'}
         </PageTitle>
       </div>
 
@@ -294,14 +312,14 @@ export function ProductFormPage() {
 
             {/* Basic info */}
             <div className="rounded-xl border border-secondary/20 bg-surface p-6">
-              <h2 className="mb-4 text-sm font-semibold text-text">Basic info</h2>
+              <h2 className="mb-4 text-sm font-semibold text-text">Información Básica</h2>
               <div className="space-y-4">
                 <FormField
                   control={form.control}
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Name</FormLabel>
+                      <FormLabel>Nombre</FormLabel>
                       <FormControl>
                         <Input placeholder='MacBook Pro 16"' {...field} />
                       </FormControl>
@@ -314,11 +332,11 @@ export function ProductFormPage() {
                   name="description"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Description</FormLabel>
+                      <FormLabel>Descripción</FormLabel>
                       <FormControl>
                         <textarea
                           rows={4}
-                          placeholder="Describe the product…"
+                          placeholder="Describí el producto…"
                           className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-text placeholder:text-muted outline-none focus:ring-2 focus:ring-primary/40 resize-none"
                           {...field}
                         />
@@ -332,14 +350,14 @@ export function ProductFormPage() {
 
             {/* Pricing & stock */}
             <div className="rounded-xl border border-secondary/20 bg-surface p-6">
-              <h2 className="mb-4 text-sm font-semibold text-text">Pricing & stock</h2>
+              <h2 className="mb-4 text-sm font-semibold text-text">Precios e Inventario</h2>
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
                 <FormField
                   control={form.control}
                   name="price"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Price ($)</FormLabel>
+                      <FormLabel>Precio ($)</FormLabel>
                       <FormControl>
                         <Input type="number" step="0.01" min="0" {...field} />
                       </FormControl>
@@ -352,13 +370,13 @@ export function ProductFormPage() {
                   name="compareAtPrice"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Compare at ($)</FormLabel>
+                      <FormLabel>Precio anterior ($)</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
                           step="0.01"
                           min="0"
-                          placeholder="Optional"
+                          placeholder="Opcional"
                           {...field}
                           value={field.value ?? ''}
                         />
@@ -372,7 +390,7 @@ export function ProductFormPage() {
                   name="stock"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Stock</FormLabel>
+                      <FormLabel>Inventario</FormLabel>
                       <FormControl>
                         <Input type="number" min="0" {...field} />
                       </FormControl>
@@ -386,16 +404,16 @@ export function ProductFormPage() {
             {/* Variants */}
             <div className="rounded-xl border border-secondary/20 bg-surface p-6">
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-sm font-semibold text-text">Variants</h2>
+                <h2 className="text-sm font-semibold text-text">Variantes</h2>
                 <Button type="button" variant="outline" size="sm" onClick={addVariant}>
                   <Plus className="mr-1.5 h-3.5 w-3.5" />
-                  Add variant
+                  Añadir variante
                 </Button>
               </div>
 
               {fields.length === 0 ? (
                 <p className="text-sm text-muted">
-                  No variants yet. Add one for options like color or storage.
+                  Aún no hay variantes. Agregá una para opciones como color o almacenamiento.
                 </p>
               ) : (
                 <div className="flex flex-col gap-4">
@@ -408,7 +426,7 @@ export function ProductFormPage() {
                       >
                         <div className="mb-3 flex items-center justify-between">
                           <span className="text-xs font-semibold text-muted uppercase tracking-wide">
-                            Variant {index + 1}
+                            Variante {index + 1}
                           </span>
                           <button
                             type="button"
@@ -425,9 +443,9 @@ export function ProductFormPage() {
                             name={`variants.${index}.name`}
                             render={({ field: f }) => (
                               <FormItem className="sm:col-span-2">
-                                <FormLabel>Name</FormLabel>
+                                <FormLabel>Nombre</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="Space Gray" {...f} />
+                                  <Input placeholder="Gris Espacial" {...f} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -451,7 +469,7 @@ export function ProductFormPage() {
                             name={`variants.${index}.price`}
                             render={({ field: f }) => (
                               <FormItem>
-                                <FormLabel>Price ($)</FormLabel>
+                                <FormLabel>Precio ($)</FormLabel>
                                 <FormControl>
                                   <Input type="number" step="0.01" min="0" {...f} />
                                 </FormControl>
@@ -464,7 +482,7 @@ export function ProductFormPage() {
                             name={`variants.${index}.stock`}
                             render={({ field: f }) => (
                               <FormItem>
-                                <FormLabel>Stock</FormLabel>
+                                <FormLabel>Inventario</FormLabel>
                                 <FormControl>
                                   <Input type="number" min="0" {...f} />
                                 </FormControl>
@@ -476,7 +494,7 @@ export function ProductFormPage() {
 
                         {/* Variant image */}
                         <div className="mt-3">
-                          <p className="mb-1.5 text-xs font-medium text-text">Image</p>
+                          <p className="mb-1.5 text-xs font-medium text-text">Imagen</p>
                           <input
                             ref={(el) => { variantFileRefs.current[index] = el }}
                             type="file"
@@ -513,7 +531,7 @@ export function ProductFormPage() {
                                   onClick={() => variantFileRefs.current[index]?.click()}
                                   className="text-xs font-medium text-primary hover:underline"
                                 >
-                                  Replace
+                                  Reemplazar
                                 </button>
                               )}
                             </div>
@@ -524,7 +542,7 @@ export function ProductFormPage() {
                               className="flex items-center gap-2 rounded-lg border border-dashed border-secondary/30 px-4 py-2.5 text-xs text-muted transition hover:border-primary/40 hover:text-primary"
                             >
                               <ImagePlus className="h-4 w-4" />
-                              Upload image
+                              Subir imagen
                             </button>
                           )}
                           {imgState.error && (
@@ -544,7 +562,7 @@ export function ProductFormPage() {
             {/* Product images */}
             <div className="rounded-xl border border-secondary/20 bg-surface p-6">
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-sm font-semibold text-text">Images</h2>
+                <h2 className="text-sm font-semibold text-text">Imágenes</h2>
                 <span className="text-xs text-muted">{imageUrls.length}/{MAX_IMAGES}</span>
               </div>
 
@@ -563,7 +581,7 @@ export function ProductFormPage() {
                     <div key={url} className="relative aspect-square overflow-hidden rounded-lg border border-secondary/20 bg-background">
                       {i === 0 && (
                         <span className="absolute left-1 top-1 z-10 rounded bg-primary px-1 py-0.5 text-[10px] font-bold text-white leading-none">
-                          Main
+                          Principal
                         </span>
                       )}
                       <img src={url} alt={`Image ${i + 1}`} className="h-full w-full object-cover" />
@@ -590,7 +608,7 @@ export function ProductFormPage() {
                         ? <Loader2 className="h-5 w-5 animate-spin text-primary" />
                         : <ImagePlus className="h-5 w-5" />
                       }
-                      <span className="text-[10px]">Add</span>
+                      <span className="text-[10px]">Añadir</span>
                     </button>
                   )}
                 </div>
@@ -606,7 +624,7 @@ export function ProductFormPage() {
                   ) : (
                     <ImagePlus className="h-8 w-8" />
                   )}
-                  <span className="text-sm font-medium">Click to upload</span>
+                  <span className="text-sm font-medium">Haz clic para subir</span>
                   <span className="text-xs">PNG, JPG, WEBP · hasta {MAX_IMAGES} imágenes</span>
                 </button>
               )}
@@ -614,27 +632,51 @@ export function ProductFormPage() {
               {uploadError && (
                 <p className="mt-2 text-xs text-red-500">{uploadError}</p>
               )}
+
+              {/* Agregado: Input por URL */}
+              <div className="mt-4 flex flex-col gap-2">
+                <p className="text-xs font-medium text-text">O añadir desde URL</p>
+                <div className="flex gap-2">
+                  <Input 
+                    type="url" 
+                    placeholder="https://ejemplo.com/imagen.jpg" 
+                    value={imageUrlInput}
+                    onChange={(e) => setImageUrlInput(e.target.value)}
+                    disabled={imageUrls.length >= MAX_IMAGES || uploading}
+                  />
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    onClick={handleAddImageUrl}
+                    disabled={!imageUrlInput.trim() || imageUrls.length >= MAX_IMAGES || uploading}
+                  >
+                    Añadir URL
+                  </Button>
+                </div>
+              </div>
             </div>
 
             {/* Organization */}
             <div className="rounded-xl border border-secondary/20 bg-surface p-6">
-              <h2 className="mb-4 text-sm font-semibold text-text">Organization</h2>
+              <h2 className="mb-4 text-sm font-semibold text-text">Organización</h2>
               <div className="space-y-4">
                 <FormField
                   control={form.control}
                   name="categoryId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Category</FormLabel>
+                      <FormLabel>Categoría</FormLabel>
                       <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select…" />
+                            <SelectValue placeholder="Seleccionar…" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {categories.map((c) => (
-                            <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                          {flattenedCategories.map((c) => (
+                            <SelectItem key={c.id} value={c.id}>
+                              {'- '.repeat(c.depth)}{c.name}
+                            </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -647,11 +689,11 @@ export function ProductFormPage() {
                   name="brandId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Brand</FormLabel>
+                      <FormLabel>Marca</FormLabel>
                       <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select…" />
+                            <SelectValue placeholder="Seleccionar…" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -669,7 +711,7 @@ export function ProductFormPage() {
                   name="isActive"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Status</FormLabel>
+                      <FormLabel>Estado</FormLabel>
                       <Select
                         onValueChange={(v) => field.onChange(v === 'true')}
                         value={String(field.value)}
@@ -680,8 +722,8 @@ export function ProductFormPage() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="true">Active</SelectItem>
-                          <SelectItem value="false">Draft</SelectItem>
+                          <SelectItem value="true">Activo</SelectItem>
+                          <SelectItem value="false">Borrador</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -693,10 +735,10 @@ export function ProductFormPage() {
 
             <div className="flex flex-col gap-2">
               <Button type="submit" disabled={form.formState.isSubmitting || anyUploading}>
-                {isEdit ? 'Save changes' : 'Create product'}
+                {isEdit ? 'Guardar cambios' : 'Crear producto'}
               </Button>
               <Button type="button" variant="outline" asChild>
-                <Link to="/admin/products">Cancel</Link>
+                <Link to="/admin/products">Cancelar</Link>
               </Button>
             </div>
           </div>

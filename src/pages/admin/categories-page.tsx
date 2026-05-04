@@ -25,11 +25,12 @@ import type { Category } from '@/entities/category'
 import { useCategories, useCreateCategory, useUpdateCategory, useDeleteCategory } from '@/entities/category'
 
 const schema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
+  name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres'),
   slug: z
     .string()
-    .min(2, 'Slug must be at least 2 characters')
-    .regex(/^[a-z0-9-]+$/, 'Only lowercase letters, numbers and hyphens'),
+    .min(2, 'El slug debe tener al menos 2 caracteres')
+    .regex(/^[a-z0-9-]+$/, 'Solo letras minúsculas, números y guiones'),
+  parentId: z.string().optional().nullable().or(z.literal('')),
 })
 
 type FormValues = z.infer<typeof schema>
@@ -49,17 +50,17 @@ export function CategoriesPage() {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { name: '', slug: '' },
+    defaultValues: { name: '', slug: '', parentId: '' },
   })
 
   function openAdd() {
-    form.reset({ name: '', slug: '' })
+    form.reset({ name: '', slug: '', parentId: '' })
     setEditing(null)
     setSheetOpen(true)
   }
 
   function openEdit(category: Category) {
-    form.reset({ name: category.name, slug: category.slug })
+    form.reset({ name: category.name, slug: category.slug, parentId: category.parentId || '' })
     setEditing(category)
     setSheetOpen(true)
   }
@@ -75,13 +76,19 @@ export function CategoriesPage() {
   }
 
   function handleSubmit(values: FormValues) {
+    const payload = {
+      name: values.name,
+      slug: values.slug,
+      parentId: values.parentId || null,
+    }
+
     if (editing) {
       updateCategory(
-        { id: editing.id, payload: values },
+        { id: editing.id, payload },
         { onSuccess: () => setSheetOpen(false) },
       )
     } else {
-      createCategory(values, { onSuccess: () => setSheetOpen(false) })
+      createCategory(payload, { onSuccess: () => setSheetOpen(false) })
     }
   }
 
@@ -89,10 +96,10 @@ export function CategoriesPage() {
     col.accessor('name', {
       header: ({ column }) => (
         <button
-          className="flex items-center gap-1 hover:text-text"
+          className="flex items-center gap-1 text-text hover:text-primary transition-colors"
           onClick={() => column.toggleSorting()}
         >
-          Name <ArrowUpDown className="h-3.5 w-3.5" />
+          Nombre <ArrowUpDown className="h-3.5 w-3.5" />
         </button>
       ),
       cell: ({ getValue }) => (
@@ -100,7 +107,7 @@ export function CategoriesPage() {
       ),
     }),
     col.accessor('slug', {
-      header: 'Slug',
+      header: 'URL Amigable',
       cell: ({ getValue }) => (
         <code className="rounded bg-background px-1.5 py-0.5 text-xs text-secondary">
           {getValue()}
@@ -122,7 +129,7 @@ export function CategoriesPage() {
               disabled={pendingUpdate || pendingDelete}
               onClick={() => openEdit(c)}
               className="rounded-md p-1.5 text-secondary hover:bg-background hover:text-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-              aria-label="Edit"
+              aria-label="Editar"
             >
               <Pencil className="h-4 w-4" />
             </button>
@@ -131,7 +138,7 @@ export function CategoriesPage() {
               disabled={pendingUpdate || pendingDelete}
               onClick={() => removeCategory(c.id)}
               className="rounded-md p-1.5 text-secondary hover:bg-background hover:text-destructive transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-              aria-label="Delete"
+              aria-label="Eliminar"
             >
               <Trash2 className="h-4 w-4" />
             </button>
@@ -154,18 +161,18 @@ export function CategoriesPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <PageTitle>Categories</PageTitle>
+      <PageTitle>Categorías</PageTitle>
 
       <div className="flex items-center justify-between gap-4">
         <Input
-          placeholder="Search categories…"
+          placeholder="Buscar categorías…"
           value={globalFilter}
           onChange={(e) => setGlobalFilter(e.target.value)}
           className="max-w-xs"
         />
         <Button size="sm" onClick={openAdd}>
           <Plus className="mr-1.5 h-4 w-4" />
-          Add category
+          Añadir Categoría
         </Button>
       </div>
 
@@ -193,7 +200,7 @@ export function CategoriesPage() {
               {table.getRowModel().rows.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={columns.length} className="py-10 text-center text-sm text-secondary">
-                    No categories found.
+                    No se encontraron categorías.
                   </TableCell>
                 </TableRow>
               ) : (
@@ -213,13 +220,13 @@ export function CategoriesPage() {
       )}
 
       <p className="text-xs text-secondary">
-        {table.getFilteredRowModel().rows.length} of {categories.length} categories
+        {table.getFilteredRowModel().rows.length} de {categories.length} categorías
       </p>
 
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
         <SheetContent className="w-full sm:max-w-md">
           <SheetHeader>
-            <SheetTitle>{editing ? 'Edit category' : 'Add category'}</SheetTitle>
+            <SheetTitle>{editing ? 'Editar Categoría' : 'Añadir Categoría'}</SheetTitle>
           </SheetHeader>
 
           <Form {...form}>
@@ -233,7 +240,7 @@ export function CategoriesPage() {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>Nombre</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Laptops"
@@ -250,9 +257,36 @@ export function CategoriesPage() {
                 name="slug"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Slug</FormLabel>
+                    <FormLabel>URL Amigable (Slug)</FormLabel>
                     <FormControl>
                       <Input placeholder="laptops" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="parentId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Categoría Padre</FormLabel>
+                    <FormControl>
+                      <select
+                        {...field}
+                        value={field.value || ''}
+                        className="w-full rounded-md border border-input bg-surface px-3 py-2 text-sm text-text outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-50"
+                      >
+                        <option value="">Ninguna (Categoría Principal)</option>
+                        {categories
+                          .filter((c) => c.id !== editing?.id) // Evitar que sea padre de sí misma
+                          .map((c) => (
+                            <option key={c.id} value={c.id}>
+                              {c.name}
+                            </option>
+                          ))}
+                      </select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -265,10 +299,10 @@ export function CategoriesPage() {
                   className="flex-1"
                   disabled={isCreating || isUpdating}
                 >
-                  {editing ? 'Save changes' : 'Add category'}
+                  {editing ? 'Guardar cambios' : 'Añadir Categoría'}
                 </Button>
                 <Button type="button" variant="outline" onClick={() => setSheetOpen(false)}>
-                  Cancel
+                  Cancelar
                 </Button>
               </div>
             </form>
