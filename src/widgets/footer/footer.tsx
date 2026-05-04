@@ -32,15 +32,15 @@ export function Footer() {
   ]
 
   return (
-    <footer className="bg-primary-dark text-surface">
+    <footer className="bg-surface border-t border-secondary/10">
       <div className="mx-auto max-w-7xl px-6 py-12">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <Link to="/" className="text-xl font-bold text-white">
-              Ecommerce
+            <Link to="/" className="text-xl font-bold text-text">
+              CD Brayan
             </Link>
-            <p className="mt-3 text-sm text-white/70">
+            <p className="mt-3 text-sm text-text/70">
               {t('footer.tagline')}
             </p>
           </div>
@@ -48,7 +48,7 @@ export function Footer() {
           {/* Link groups */}
           {LINK_GROUPS.map((group) => (
             <div key={group.titleKey}>
-              <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-white/50">
+              <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-text">
                 {t(group.titleKey)}
               </h3>
               <ul className="flex flex-col gap-2">
@@ -56,7 +56,7 @@ export function Footer() {
                   <li key={link.labelKey}>
                     <Link
                       to={link.to}
-                      className="text-sm text-white/70 hover:text-white transition-colors"
+                      className="text-sm text-text/70 transition-colors hover:text-text"
                     >
                       {t(link.labelKey)}
                     </Link>
@@ -67,7 +67,7 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="mt-10 border-t border-white/10 pt-6 text-center text-sm text-white/50">
+        <div className="mt-10 border-t border-secondary/10 pt-6 text-center text-sm text-text/70">
           {t('footer.copyright', { year: new Date().getFullYear() })}
         </div>
       </div>

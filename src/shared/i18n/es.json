@@ -32,7 +32,7 @@
     "privacyPolicy": "Política de privacidad",
     "termsOfService": "Términos de servicio",
     "cookiePolicy": "Política de cookies",
-    "copyright": "© {{year}} Ecommerce. Todos los derechos reservados."
+    "copyright": "© {{year}} CD Brayan. Todos los derechos reservados."
   },
   "home": {
     "hero": {
@@ -340,7 +340,7 @@
     "perkWarrantyDesc": "En todos los productos",
     "perkReturns": "Devoluciones 30 días",
     "perkReturnsDesc": "Sin preguntas",
-    "copyright": "© {{year}} PremiumTech. Todos los derechos reservados."
+    "copyright": "© {{year}} CD Brayan. Todos los derechos reservados."
   },
   "auth": {
     "login": {
@@ -386,7 +386,7 @@
     "continueShopping": "Seguir comprando"
   },
   "assistant": {
-    "title": "Asistente PremiumTech",
+    "title": "Asistente CD Brayan",
     "subtitle": "Ayuda de compra con IA",
     "openLabel": "Abrir asistente de IA",
     "closeLabel": "Cerrar asistente",

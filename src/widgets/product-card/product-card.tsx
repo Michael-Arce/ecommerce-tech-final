@@ -20,21 +20,21 @@ function getPromos(price: number, t: TFunction) {
     promos.push({
       icon: <Truck className="h-3 w-3 shrink-0" />,
       text: t('productCard.freeShipping'),
-      color: 'text-emerald-600',
+      color: 'text-success',
     })
   }
 
   promos.push({
     icon: <CreditCard className="h-3 w-3 shrink-0" />,
     text: t('productCard.installments6', { amount: formatCurrency(price / 6) }),
-    color: 'text-blue-600',
+    color: 'text-primary',
   })
 
   if (price >= 150000) {
     promos.push({
       icon: <CreditCard className="h-3 w-3 shrink-0" />,
       text: t('productCard.installments12', { amount: formatCurrency(price / 12) }),
-      color: 'text-blue-500',
+      color: 'text-primary',
     })
   } else {
     promos.push({

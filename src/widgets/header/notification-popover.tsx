@@ -76,7 +76,7 @@ export function NotificationPopover() {
       <button
         type="button"
         onClick={handleOpen}
-        className="flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+        className="flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs text-gray-700 hover:text-primary dark:text-gray-200 dark:hover:text-white transition-colors hover:bg-secondary/10"
       >
         <div className="relative">
           <Bell className="h-3.5 w-3.5" />

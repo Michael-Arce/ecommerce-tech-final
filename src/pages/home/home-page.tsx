@@ -277,7 +277,7 @@ export function HomePage() {
                       className="h-10 w-full object-contain transition-all duration-300 group-hover:scale-110"
                     />
                   )}
-                  <span className="text-[11px] font-bold uppercase tracking-widest text-muted/70 transition-colors group-hover:text-primary">
+                  <span className="text-[11px] font-bold uppercase tracking-widest text-text/70 transition-colors group-hover:text-primary">
                     {brand.name}
                   </span>
                 </Link>
@@ -296,7 +296,7 @@ export function HomePage() {
       </section>
 
       {/* Value Props */}
-      <section ref={valueRef} className="bg-primary-dark">
+      <section ref={valueRef} className="bg-surface">
         <div className="mx-auto max-w-7xl px-6 py-12">
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
             {VALUE_PROPS.map(({ Icon, titleKey, descKey, iconClass }, i) => (
@@ -305,12 +305,12 @@ export function HomePage() {
                 className={`group flex items-center gap-4 ${valueInView ? 'animate-fade-up' : 'opacity-0'}`}
                 style={{ animationDelay: `${i * 120}ms` }}
               >
-                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-white/10">
+                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
                   <Icon className={`h-6 w-6 text-accent ${iconClass}`} />
                 </div>
                 <div>
-                  <p className="font-semibold text-white">{t(titleKey)}</p>
-                  <p className="text-sm text-white/55">{t(descKey)}</p>
+                  <p className="font-semibold text-text">{t(titleKey)}</p>
+                  <p className="text-sm text-text/70">{t(descKey)}</p>
                 </div>
               </div>
             ))}

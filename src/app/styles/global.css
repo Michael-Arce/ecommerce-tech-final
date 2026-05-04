@@ -1,18 +1,25 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #6D28D9;
-  --color-primary-foreground: #FFFFFF;
-  --color-primary-dark: #5B21B6;
-  --color-secondary: #6B7280;
-  --color-accent: #06B6D4;
-  --color-accent-dark: #0891B2;
-  --color-background: #FAFAFA;
-  --color-surface: #FFFFFF;
+  /* Colores vibrantes (CD BRAYAN modernizados) */
+  --color-primary: #006FEE;   
+  --color-secondary: #F31260; 
+  --color-accent: #F5A524;    
+  --color-success: #17C964;   
+  
+  --color-background: #FFFFFF;
+  --color-surface: #F5F5F5;
   --color-text: #111827;
-  --color-muted: #9CA3AF;
-  --color-destructive: #DC2626;
 
+  /* Animaciones (estas déjalas igual) */
+  --animate-marquee: marquee 22s linear infinite;
+  /* ... (el resto de tus animaciones siguen aquí) ... */
+}
+
+@theme {
+
+
+  /* Animaciones */
   --animate-marquee: marquee 22s linear infinite;
   --animate-fade-up: fade-up 0.65s ease-out both;
   --animate-fade-in: fade-in 0.7s ease-out both;
@@ -20,6 +27,12 @@
   --animate-badge-pop: badge-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
   --animate-truck-start: truck-start 0.7s ease-out both;
   --animate-sparkle: sparkle 0.6s ease-out both;
+}
+
+.dark {
+  --color-background: #121212;
+  --color-surface: #1E1E1E;
+  --color-text: #F3F4F6;
 }
 
 @keyframes marquee {
@@ -69,10 +82,10 @@
 }
 
 @media (hover: none) {
-  .auto-truck    { animation: truck-start 1.5s ease-out infinite; animation-delay: 0.5s; }
-  .auto-shield   { animation: shield-pulse 2.5s ease-in-out infinite; }
-  .auto-spin     { animation: spin-continuous 3s linear infinite; }
-  .auto-star     { animation: star-pulse 2.5s ease-in-out infinite; }
+  .auto-truck     { animation: truck-start 1.5s ease-out infinite; animation-delay: 0.5s; }
+  .auto-shield    { animation: shield-pulse 2.5s ease-in-out infinite; }
+  .auto-spin      { animation: spin-continuous 3s linear infinite; }
+  .auto-star      { animation: star-pulse 2.5s ease-in-out infinite; }
   .auto-sparkle-1 { animation: sparkle 2.5s ease-out infinite; animation-delay: 0.8s; opacity: 0; }
   .auto-sparkle-2 { animation: sparkle 2.5s ease-out infinite; animation-delay: 1.4s; opacity: 0; }
 }
