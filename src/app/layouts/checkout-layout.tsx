@@ -1,6 +1,6 @@
 import { Outlet, Link } from '@tanstack/react-router'
 
-const STEPS = ['Cart', 'Checkout', 'Confirmation'] as const
+const STEPS = ['Carrito', 'Checkout', 'Confirmación'] as const
 
 interface CheckoutLayoutProps {
   currentStep?: number
@@ -11,7 +11,7 @@ export function CheckoutLayout({ currentStep = 1 }: CheckoutLayoutProps) {
     <div className="flex min-h-screen flex-col bg-background">
       <header className="border-b border-secondary/20 bg-surface px-6 py-4">
         <div className="mx-auto flex max-w-3xl items-center justify-between">
-          <Link to="/" className="text-lg font-bold text-primary">Ecommerce</Link>
+          <Link to="/" className="text-lg font-bold text-primary">Discos Brayan</Link>
 
           <ol className="flex items-center gap-2 text-sm">
             {STEPS.map((step, i) => (

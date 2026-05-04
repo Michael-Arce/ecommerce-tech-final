@@ -17,6 +17,7 @@ export interface Order {
   userId: string
   items: OrderItem[]
   status: OrderStatus
+  deliveryMethod: 'shipping' | 'pickup'
   total: number
   shippingAddress: Address
   createdAt: string

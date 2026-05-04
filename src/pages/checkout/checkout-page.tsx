@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { ChevronDown, ChevronUp, MapPin, User, Wand2 } from 'lucide-react'
+import { ChevronDown, ChevronUp, MapPin, User, Wand2, Truck, Store } from 'lucide-react'
 import { calculateSubtotal, calculateTax, calculateTotal } from '@/entities/cart'
 import {
   Button,
@@ -26,12 +26,22 @@ const formatCOP = (price: number) => {
 }
 
 const checkoutSchema = z.object({
+  deliveryMethod: z.enum(['shipping', 'pickup']),
   fullName: z.string().min(1, 'Requerido'),
   email: z.string().email('Correo inválido'),
   phone: z.string().min(10, 'Mínimo 10 dígitos'),
   documentId: z.string().min(5, 'Requerido'),
-  city: z.string().min(1, 'Requerido'),
-  address: z.string().min(1, 'Requerido'),
+  city: z.string().optional(),
+  address: z.string().optional(),
+}).superRefine((data, ctx) => {
+  if (data.deliveryMethod === 'shipping') {
+    if (!data.city || data.city.trim() === '') {
+      ctx.addIssue({ path: ['city'], code: z.ZodIssueCode.custom, message: 'Requerido' })
+    }
+    if (!data.address || data.address.trim() === '') {
+      ctx.addIssue({ path: ['address'], code: z.ZodIssueCode.custom, message: 'Requerido' })
+    }
+  }
 })
 
 type CheckoutFormValues = z.infer<typeof checkoutSchema>
@@ -47,19 +57,10 @@ export function CheckoutPage() {
   const [isManualSubmitting, setIsManualSubmitting] = useState(false)
   const [summaryOpen, setSummaryOpen] = useState(false)
 
-  const subtotal = calculateSubtotal(items)
-  const tax = calculateTax(subtotal, 0.1)
-  const total = calculateTotal(subtotal, tax)
-
-  useEffect(() => {
-    if (items.length === 0 && !isPlacingOrder.current) {
-      navigate({ to: '/cart' })
-    }
-  }, [items.length, navigate])
-
   const form = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutSchema),
     defaultValues: {
+      deliveryMethod: 'shipping',
       fullName: '',
       email: '',
       phone: '',
@@ -69,8 +70,22 @@ export function CheckoutPage() {
     },
   })
 
+  const deliveryMethod = form.watch('deliveryMethod')
+
+  const subtotal = calculateSubtotal(items)
+  const tax = calculateTax(subtotal, 0.1)
+  const shippingCost = deliveryMethod === 'shipping' && subtotal < 99000 ? 15000 : 0
+  const total = calculateTotal(subtotal, tax) + shippingCost
+
+  useEffect(() => {
+    if (items.length === 0 && !isPlacingOrder.current) {
+      navigate({ to: '/cart' })
+    }
+  }, [items.length, navigate])
+
   function fillDemo() {
     form.reset({
+      deliveryMethod: 'shipping',
       fullName: 'Juan Pérez',
       email: 'juan.perez@example.com',
       phone: '3001234567',
@@ -93,12 +108,19 @@ export function CheckoutPage() {
           quantity: item.quantity,
           imageUrl: item.imageUrl,
         })),
-        shippingAddress: {
-          street: data.address,
-          city: data.city,
+        deliveryMethod: data.deliveryMethod,
+        shippingAddress: data.deliveryMethod === 'shipping' ? {
+          street: data.address || '',
+          city: data.city || '',
           country: 'Colombia',
-          cedula: data.documentId, // Aquí están perfectos
-          celular: data.phone,     // Aquí están perfectos
+          cedula: data.documentId,
+          celular: data.phone,
+        } : {
+          street: 'Recogida en tienda',
+          city: 'N/A',
+          country: 'Colombia',
+          cedula: data.documentId,
+          celular: data.phone,
         },
       })
 
@@ -131,9 +153,16 @@ export function CheckoutPage() {
           quantity: item.quantity,
           imageUrl: item.imageUrl,
         })),
-        shippingAddress: {
-          street: data.address,
-          city: data.city,
+        deliveryMethod: data.deliveryMethod,
+        shippingAddress: data.deliveryMethod === 'shipping' ? {
+          street: data.address || '',
+          city: data.city || '',
+          country: 'Colombia',
+          cedula: data.documentId,
+          celular: data.phone,
+        } : {
+          street: 'Recogida en tienda',
+          city: 'N/A',
           country: 'Colombia',
           cedula: data.documentId,
           celular: data.phone,
@@ -237,44 +266,107 @@ export function CheckoutPage() {
                 </div>
               </section>
 
-              {/* Shipping */}
+              {/* Delivery Method */}
               <section className="rounded-xl border border-secondary/20 bg-surface p-4 sm:p-6">
                 <div className="mb-5 flex items-center gap-2.5">
                   <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
-                    <MapPin className="h-4 w-4 text-primary" />
+                    <Truck className="h-4 w-4 text-primary" />
                   </div>
-                  <h2 className="text-base font-semibold text-text">Dirección de Envío</h2>
+                  <h2 className="text-base font-semibold text-text">Método de Entrega</h2>
                 </div>
 
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <FormField
-                    control={form.control}
-                    name="city"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Ciudad</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Bogotá" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="address"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Dirección</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Calle 123 # 45-67" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                <FormField
+                  control={form.control}
+                  name="deliveryMethod"
+                  render={({ field }) => (
+                    <FormItem className="space-y-3">
+                      <FormControl>
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <label
+                            className={`flex cursor-pointer flex-col rounded-lg border p-4 transition-colors ${
+                              field.value === 'shipping'
+                                ? 'border-primary bg-primary/5'
+                                : 'border-secondary/20 bg-background hover:border-primary/30'
+                            }`}
+                            onClick={() => field.onChange('shipping')}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="font-semibold text-text flex items-center gap-2">
+                                <Truck className="h-4 w-4" /> Envío a domicilio
+                              </span>
+                              <div className={`flex h-5 w-5 items-center justify-center rounded-full border ${field.value === 'shipping' ? 'border-primary' : 'border-secondary/30'}`}>
+                                {field.value === 'shipping' && <div className="h-2.5 w-2.5 rounded-full bg-primary" />}
+                              </div>
+                            </div>
+                            <span className="mt-2 text-xs text-secondary">Recibí tu pedido en la puerta de tu casa.</span>
+                          </label>
+
+                          <label
+                            className={`flex cursor-pointer flex-col rounded-lg border p-4 transition-colors ${
+                              field.value === 'pickup'
+                                ? 'border-primary bg-primary/5'
+                                : 'border-secondary/20 bg-background hover:border-primary/30'
+                            }`}
+                            onClick={() => field.onChange('pickup')}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="font-semibold text-text flex items-center gap-2">
+                                <Store className="h-4 w-4" /> Recoger en tienda
+                              </span>
+                              <div className={`flex h-5 w-5 items-center justify-center rounded-full border ${field.value === 'pickup' ? 'border-primary' : 'border-secondary/30'}`}>
+                                {field.value === 'pickup' && <div className="h-2.5 w-2.5 rounded-full bg-primary" />}
+                              </div>
+                            </div>
+                            <span className="mt-2 text-xs text-secondary">Retirá gratis en nuestra sucursal.</span>
+                          </label>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </section>
+
+              {/* Shipping */}
+              {deliveryMethod === 'shipping' && (
+                <section className="rounded-xl border border-secondary/20 bg-surface p-4 sm:p-6">
+                  <div className="mb-5 flex items-center gap-2.5">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
+                      <MapPin className="h-4 w-4 text-primary" />
+                    </div>
+                    <h2 className="text-base font-semibold text-text">Dirección de Envío</h2>
+                  </div>
+
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <FormField
+                      control={form.control}
+                      name="city"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Ciudad</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Bogotá" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="address"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Dirección</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Calle 123 # 45-67" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </section>
+              )}
 
             </div>
 
@@ -307,6 +399,19 @@ export function CheckoutPage() {
 
               {/* Nota: OrderSummary normalmente renderiza subtotales, se deja igual y el formato COP aplica en local */}
               <OrderSummary items={items} />
+              {shippingCost > 0 && (
+                <div className="flex justify-between text-sm mt-[-10px] mb-2 px-2 text-secondary">
+                  <span>Envío</span><span>{formatCOP(shippingCost)}</span>
+                </div>
+              )}
+              {deliveryMethod === 'pickup' && (
+                <div className="flex justify-between text-sm mt-[-10px] mb-2 px-2 text-emerald-600 font-medium">
+                  <span>Envío</span><span>Gratis (Recogida)</span>
+                </div>
+              )}
+              <div className="flex justify-between font-bold text-text border-t border-secondary/10 pt-3 px-2 mb-4">
+                <span>Total Final</span><span className="text-primary">{formatCOP(total)}</span>
+              </div>
 
               {orderError && (
                 <p className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
@@ -362,6 +467,16 @@ export function CheckoutPage() {
             <div className="flex justify-between text-secondary mt-1">
               <span>{t('checkout.tax')}</span><span>{formatCOP(tax)}</span>
             </div>
+            {shippingCost > 0 && (
+              <div className="flex justify-between text-secondary mt-1">
+                <span>Envío</span><span>{formatCOP(shippingCost)}</span>
+              </div>
+            )}
+            {deliveryMethod === 'pickup' && (
+              <div className="flex justify-between text-emerald-600 font-medium mt-1">
+                <span>Envío</span><span>Gratis (Recogida)</span>
+              </div>
+            )}
             <div className="mt-2 flex justify-between font-bold text-text border-t border-secondary/10 pt-2">
               <span>{t('checkout.total')}</span><span>{formatCOP(total)}</span>
             </div>

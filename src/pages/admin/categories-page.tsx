@@ -30,7 +30,7 @@ const schema = z.object({
     .string()
     .min(2, 'El slug debe tener al menos 2 caracteres')
     .regex(/^[a-z0-9-]+$/, 'Solo letras minúsculas, números y guiones'),
-  parentId: z.string().optional().nullable().or(z.literal('')),
+  parentId: z.string().optional().nullable().transform(val => val === '' ? null : val),
 })
 
 type FormValues = z.infer<typeof schema>
@@ -79,7 +79,7 @@ export function CategoriesPage() {
     const payload = {
       name: values.name,
       slug: values.slug,
-      parentId: values.parentId || null,
+      parentId: values.parentId === '' ? null : values.parentId,
     }
 
     if (editing) {

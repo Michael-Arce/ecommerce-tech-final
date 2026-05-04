@@ -166,6 +166,7 @@ model Order {
   shippingAddress   Address @relation(fields: [shippingAddressId], references: [id])
 
   items OrderItem[]
+  deliveryMethod String @default("shipping")
 }
 
 model OrderItem {

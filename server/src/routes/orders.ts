@@ -47,6 +47,7 @@ const placeOrderSchema = z.object({
     quantity:  z.number().int().positive(),
     imageUrl:  z.string(),
   })).min(1).max(50),
+  deliveryMethod: z.enum(['shipping', 'pickup']),
   shippingAddress: z.object({
     street:  z.string().min(1),
     city:    z.string().min(1),
@@ -58,7 +59,7 @@ const placeOrderSchema = z.object({
 
 router.post('/', authenticate, async (req, res, next) => {
   try {
-    const { items, shippingAddress } = placeOrderSchema.parse(req.body)
+    const { items, deliveryMethod, shippingAddress } = placeOrderSchema.parse(req.body)
 
     const productIds = [...new Set(items.map((i) => i.productId))]
     const products = await prisma.product.findMany({
@@ -81,6 +82,7 @@ router.post('/', authenticate, async (req, res, next) => {
       data: {
         user:   { connect: { id: req.auth!.userId } },
         status: 'pending',
+        deliveryMethod,
         total:  Number((subtotal * 1.1).toFixed(2)),
         shippingAddress: {
           create: { ...shippingAddress, userId: req.auth!.userId, isDefault: false },

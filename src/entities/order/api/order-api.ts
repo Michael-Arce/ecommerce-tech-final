@@ -11,6 +11,7 @@ export interface PlaceOrderPayload {
     quantity: number
     imageUrl: string
   }>
+  deliveryMethod: 'shipping' | 'pickup'
   shippingAddress: {
     street: string
     city: string

@@ -6,12 +6,12 @@ import { LogoutButton } from '@/features/logout'
 import { Sheet, SheetContent, SheetTrigger } from '@/shared/ui/sheet'
 
 const NAV_LINKS = [
-  { to: '/admin/dashboard', label: 'Dashboard' },
-  { to: '/admin/products', label: 'Products' },
-  { to: '/admin/categories', label: 'Categories' },
-  { to: '/admin/brands', label: 'Brands' },
-  { to: '/admin/orders', label: 'Orders' },
-  { to: '/admin/users', label: 'Users' },
+  { to: '/admin/dashboard', label: 'Panel Principal' },
+  { to: '/admin/products', label: 'Productos' },
+  { to: '/admin/categories', label: 'Categorías' },
+  { to: '/admin/brands', label: 'Marcas' },
+  { to: '/admin/orders', label: 'Pedidos' },
+  { to: '/admin/users', label: 'Usuarios' },
 ] as const
 
 function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
@@ -19,7 +19,7 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
     <>
       <div className="px-6 py-5">
         <Link to="/" className="text-lg font-bold text-white" onClick={onNavigate}>
-          Premium<span className="text-accent">Tech</span>
+          Discos <span className="text-accent">Brayan</span>
           <span className="ml-1.5 text-xs font-normal text-white/40">Admin</span>
         </Link>
       </div>

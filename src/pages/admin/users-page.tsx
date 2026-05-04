@@ -38,7 +38,7 @@ export function UsersPage() {
   const columns = [
     col.display({
       id: 'user',
-      header: 'User',
+      header: 'Usuario',
       cell: ({ row }) => {
         const u = row.original
         return (
@@ -60,26 +60,26 @@ export function UsersPage() {
     col.accessor('role', {
       header: ({ column }) => (
         <button
-          className="flex items-center gap-1 hover:text-text"
+          className="flex items-center gap-1 text-text hover:text-primary transition-colors"
           onClick={() => column.toggleSorting()}
         >
-          Role <ArrowUpDown className="h-3.5 w-3.5" />
+          Rol <ArrowUpDown className="h-3.5 w-3.5" />
         </button>
       ),
       cell: ({ getValue }) =>
         getValue() === 'admin' ? (
-          <Badge className="bg-primary/10 text-primary hover:bg-primary/10">Admin</Badge>
+          <Badge className="bg-primary/10 text-primary hover:bg-primary/10">Administrador</Badge>
         ) : (
-          <Badge variant="secondary">Customer</Badge>
+          <Badge variant="secondary">Cliente</Badge>
         ),
     }),
     col.accessor('createdAt', {
       header: ({ column }) => (
         <button
-          className="flex items-center gap-1 hover:text-text"
+          className="flex items-center gap-1 text-text hover:text-primary transition-colors"
           onClick={() => column.toggleSorting()}
         >
-          Joined <ArrowUpDown className="h-3.5 w-3.5" />
+          Registrado <ArrowUpDown className="h-3.5 w-3.5" />
         </button>
       ),
       cell: ({ getValue }) => (
@@ -113,12 +113,12 @@ export function UsersPage() {
               {isAdmin ? (
                 <>
                   <ShieldOff className="mr-1.5 h-3.5 w-3.5" />
-                  Demote
+                  Quitar Admin
                 </>
               ) : (
                 <>
                   <ShieldCheck className="mr-1.5 h-3.5 w-3.5" />
-                  Promote
+                  Hacer Admin
                 </>
               )}
             </Button>
@@ -127,7 +127,7 @@ export function UsersPage() {
               disabled={pendingUpdate || pendingDelete}
               onClick={() => removeUser(u.id)}
               className="rounded-md p-1.5 text-secondary hover:bg-background hover:text-destructive transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-              aria-label="Delete user"
+              aria-label="Eliminar usuario"
             >
               <Trash2 className="h-4 w-4" />
             </button>
@@ -154,19 +154,19 @@ export function UsersPage() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-start justify-between">
-        <PageTitle>Users</PageTitle>
+        <PageTitle>Usuarios</PageTitle>
         <div className="flex items-center gap-4 text-sm text-secondary">
           <span>
-            <span className="font-semibold text-primary">{adminCount}</span> admins
+            <span className="font-semibold text-primary">{adminCount}</span> administradores
           </span>
           <span>
-            <span className="font-semibold text-text">{customerCount}</span> customers
+            <span className="font-semibold text-text">{customerCount}</span> clientes
           </span>
         </div>
       </div>
 
       <Input
-        placeholder="Search users…"
+        placeholder="Buscar usuarios…"
         value={globalFilter}
         onChange={(e) => setGlobalFilter(e.target.value)}
         className="max-w-xs"
@@ -196,7 +196,7 @@ export function UsersPage() {
               {table.getRowModel().rows.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={columns.length} className="py-10 text-center text-sm text-secondary">
-                    No users found.
+                    No se encontraron usuarios.
                   </TableCell>
                 </TableRow>
               ) : (
@@ -216,7 +216,7 @@ export function UsersPage() {
       )}
 
       <p className="text-xs text-secondary">
-        {table.getFilteredRowModel().rows.length} of {users.length} users
+        {table.getFilteredRowModel().rows.length} de {users.length} usuarios
       </p>
     </div>
   )

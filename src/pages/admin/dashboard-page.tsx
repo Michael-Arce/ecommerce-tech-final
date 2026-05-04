@@ -24,20 +24,20 @@ export function DashboardPage() {
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <PageTitle>Dashboard</PageTitle>
-        {user && <p className="mt-1 text-sm text-secondary">Welcome back, {user.firstName}.</p>}
+        <PageTitle>Panel Principal</PageTitle>
+        {user && <p className="mt-1 text-sm text-secondary">Bienvenido de vuelta, {user.firstName}.</p>}
       </div>
 
       <AdminStats />
 
       <div>
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-base font-semibold text-text">Recent Orders</h2>
+          <h2 className="text-base font-semibold text-text">Pedidos Recientes</h2>
           <Link
             to="/admin/orders"
             className="flex items-center gap-1 text-xs font-medium text-primary hover:underline"
           >
-            View all <ChevronRight className="h-3.5 w-3.5" />
+            Ver todos <ChevronRight className="h-3.5 w-3.5" />
           </Link>
         </div>
 
@@ -45,11 +45,11 @@ export function DashboardPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Order ID</TableHead>
-                <TableHead>Ship to</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Total</TableHead>
+                <TableHead className="text-secondary">ID Pedido</TableHead>
+                <TableHead className="text-secondary">Enviar a</TableHead>
+                <TableHead className="text-secondary">Fecha</TableHead>
+                <TableHead className="text-secondary">Estado</TableHead>
+                <TableHead className="text-right text-secondary">Total</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -66,14 +66,14 @@ export function DashboardPage() {
               ) : recentOrders.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={5} className="py-8 text-center text-sm text-secondary">
-                    No orders yet.
+                    Aún no hay pedidos.
                   </TableCell>
                 </TableRow>
               ) : (
                 recentOrders.map((order) => (
                   <TableRow key={order.id} className="hover:bg-background/50">
-                    <TableCell className="font-mono text-xs text-secondary">{order.id}</TableCell>
-                    <TableCell className="text-sm">{order.shippingAddress.city}, {order.shippingAddress.state}</TableCell>
+                    <TableCell className="font-mono text-xs text-text">{order.id}</TableCell>
+                    <TableCell className="text-sm text-text">{order.shippingAddress.city}, {order.shippingAddress.state}</TableCell>
                     <TableCell className="text-sm text-secondary">{formatDate(order.createdAt)}</TableCell>
                     <TableCell>
                       <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize ${STATUS_CLASS[order.status]}`}>

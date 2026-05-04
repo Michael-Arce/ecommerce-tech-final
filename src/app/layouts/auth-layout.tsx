@@ -21,7 +21,7 @@ export function AuthLayout() {
         <div className="absolute -bottom-24 -right-10 h-80 w-80 rounded-full bg-accent/5 blur-3xl" />
 
         <Link to="/" className="relative z-10 text-3xl font-extrabold tracking-tight text-white">
-          Premium<span className="text-accent">Tech</span>
+          Discos <span className="text-accent">Brayan</span>
         </Link>
 
         <div className="relative z-10 flex flex-col gap-10">
@@ -61,7 +61,7 @@ export function AuthLayout() {
 
           <div className="mb-8 text-center lg:hidden">
             <Link to="/" className="text-2xl font-extrabold tracking-tight text-primary">
-              Premium<span className="text-accent">Tech</span>
+              Discos <span className="text-accent">Brayan</span>
             </Link>
           </div>
 

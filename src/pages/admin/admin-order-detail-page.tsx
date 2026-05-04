@@ -12,11 +12,11 @@ import { useOrderById, useUpdateOrderStatus } from '@/entities/order'
 import type { OrderStatus } from '@/entities/order'
 
 const STATUS_OPTIONS: { value: OrderStatus; label: string }[] = [
-  { value: 'pending',    label: 'Pending' },
-  { value: 'processing', label: 'Processing' },
-  { value: 'shipped',    label: 'Shipped' },
-  { value: 'delivered',  label: 'Delivered' },
-  { value: 'cancelled',  label: 'Cancelled' },
+  { value: 'pending',    label: 'Pendiente' },
+  { value: 'processing', label: 'En Proceso' },
+  { value: 'shipped',    label: 'Enviado' },
+  { value: 'delivered',  label: 'Entregado' },
+  { value: 'cancelled',  label: 'Cancelado' },
 ]
 
 const STATUS_CLASS: Record<OrderStatus, string> = {
@@ -50,9 +50,9 @@ export function AdminOrderDetailPage() {
   if (!order) {
     return (
       <div className="py-20 text-center">
-        <p className="text-lg font-semibold text-text">Order not found</p>
+        <p className="text-lg font-semibold text-text">Pedido no encontrado</p>
         <Button asChild variant="outline" className="mt-4">
-          <Link to="/admin/orders">Back to orders</Link>
+          <Link to="/admin/orders">Volver a pedidos</Link>
         </Button>
       </div>
     )
@@ -75,7 +75,7 @@ export function AdminOrderDetailPage() {
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div className="flex-1">
-          <PageTitle>Order detail</PageTitle>
+        <PageTitle>Detalle del Pedido</PageTitle>
           <p className="mt-0.5 font-mono text-xs text-secondary">{order.id}</p>
         </div>
         {/* Status selector */}
@@ -105,7 +105,7 @@ export function AdminOrderDetailPage() {
           <div className="rounded-xl border border-secondary/20 bg-surface">
             <div className="border-b border-secondary/10 px-5 py-4">
               <h2 className="text-sm font-semibold text-text">
-                Items ({order.items.length})
+              Productos ({order.items.length})
               </h2>
             </div>
             <ul className="divide-y divide-secondary/10">
@@ -125,7 +125,7 @@ export function AdminOrderDetailPage() {
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium text-text">{item.name}</p>
                     {item.variantId && (
-                      <p className="text-xs text-secondary">Variant: {item.variantId}</p>
+                      <p className="text-xs text-secondary">Variante: {item.variantId}</p>
                     )}
                     <p className="text-xs text-secondary">
                       {formatCurrency(item.price)} × {item.quantity}
@@ -144,10 +144,10 @@ export function AdminOrderDetailPage() {
         <div className="flex flex-col gap-4">
           {/* Order summary */}
           <div className="rounded-xl border border-secondary/20 bg-surface p-5">
-            <h2 className="mb-4 text-sm font-semibold text-text">Summary</h2>
+            <h2 className="mb-4 text-sm font-semibold text-text">Resumen</h2>
             <dl className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <dt className="text-secondary">Date</dt>
+                <dt className="text-secondary">Fecha</dt>
                 <dd className="font-medium text-text">{formatDate(order.createdAt)}</dd>
               </div>
               <div className="flex justify-between">
@@ -156,7 +156,7 @@ export function AdminOrderDetailPage() {
               </div>
               {shipping > 0 && (
                 <div className="flex justify-between">
-                  <dt className="text-secondary">Shipping</dt>
+                  <dt className="text-secondary">Envío</dt>
                   <dd className="font-medium text-text">{formatCurrency(shipping)}</dd>
                 </div>
               )}
@@ -171,7 +171,7 @@ export function AdminOrderDetailPage() {
           <div className="rounded-xl border border-secondary/20 bg-surface p-5">
             <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-text">
               <MapPin className="h-4 w-4 text-secondary" />
-              Shipping address
+              Dirección de envío
             </h2>
             <address className="not-italic text-sm text-secondary leading-relaxed">
               {order.shippingAddress.street}<br />
